@@ -24,8 +24,28 @@ public struct LineC
 
     #region METHODS
     #endregion
+    public  Vector3C NearestPointToPoint(Vector3C point)
+    {
+        Vector3C vector = point - origin;
+        float dot = Vector3C.Dot(vector, direction);
+        Vector3C nearestPoint = origin + direction * dot;
+        return nearestPoint;
+    }
+    public static Vector3C NearestPointToLine(LineC line)
+    {
+        
+        return new Vector3C();
+    }
 
     #region FUNCTIONS
+    public static LineC From(Vector3C pointA, Vector3C pointB )
+    {
+        Vector3C origin = pointA;
+        Vector3C direction = pointB - pointA;
+        LineC line = new LineC(origin, direction);
+        return line;
+    }
+
     #endregion
 
 }
