@@ -1,4 +1,5 @@
 using System;
+using System.Net.NetworkInformation;
 
 [System.Serializable]
 public struct PlaneC
@@ -52,6 +53,25 @@ public struct PlaneC
     public (float A, float B, float C, float D) adada()
     {
         return (0, 0, 0, 0);
+    }
+    //Esta habrá que comprobarla
+    public Vector3C NearestPoint(Vector3C point)
+    {
+        Vector3C vector = point - this.position;
+        float dot = Vector3C.Dot(vector, this.normal);
+        Vector3C nearestPoint = point - this.normal*dot;
+        return nearestPoint;
+    }
+    public Vector3C Intersection(PlaneC plane)
+    {
+        return new Vector3C();
+    }
+    public bool Equals(PlaneC other)
+    {
+        if(this.normal ==  other.normal) 
+            return true;
+        else
+            return false;
     }
     #endregion
 

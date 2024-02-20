@@ -9,15 +9,35 @@ public struct SphereC
     #endregion
 
     #region PROPIERTIES
+    public static SphereC unitary
+    {
+        get { return new SphereC(new Vector3C(0,0,0), 1); }
+    }
     #endregion
 
     #region CONSTRUCTORS
+    public SphereC (Vector3C position, float radius)
+    {
+        this.position = position;
+        this.radius = radius;
+    }
     #endregion
 
     #region OPERATORS
     #endregion
 
     #region METHODS
+    public bool IsInside(SphereC other)
+    {
+        return false;
+    }
+    public bool Equals (SphereC other)
+    {
+        if(other.radius == radius)
+            return true;
+        else 
+            return false;
+    }
     #endregion
 
     #region FUNCTIONS
