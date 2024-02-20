@@ -31,11 +31,6 @@ public struct LineC
         Vector3C nearestPoint = origin + direction * dot;
         return nearestPoint;
     }
-    public static Vector3C NearestPointToLine(LineC line)
-    {
-        
-        return new Vector3C();
-    }
 
     #region FUNCTIONS
     public static LineC From(Vector3C pointA, Vector3C pointB )
