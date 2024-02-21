@@ -58,8 +58,8 @@ public struct PlaneC
     public Vector3C NearestPoint(Vector3C point)
     {
         Vector3C vector = point - this.position;
-        float dot = Vector3C.Dot(vector, this.normal);
-        Vector3C nearestPoint = point - this.normal*dot;
+        float dot = Vector3C.Dot(vector, this.normal.normalized);
+        Vector3C nearestPoint = point - this.normal.normalized*dot;
         return nearestPoint;
     }
     public Vector3C IntersectionWithLine(LineC line)

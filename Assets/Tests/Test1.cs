@@ -23,13 +23,19 @@ public class Test1 : MonoBehaviour
     void Update()
     {
         //nearestPoint = lineC.NearestPointToPoint(point);
-
+        CustomDebug.Print(point, 5);
+        nearestPoint = planeC.NearestPoint(point);
         //CustomDebug.Print(lineC, colorRed, false);
-        //CustomDebug.Print(point, 5);
-        //CustomDebug.Print(nearestPoint, 5);
-        //Debug.DrawLine(point.ToUnity(),nearestPoint.ToUnity(), Color.magenta, 5f);
+        
+        CustomDebug.Print(nearestPoint, 5);
+        Debug.DrawLine(point.ToUnity(),nearestPoint.ToUnity(), Color.magenta, 5f);
+        Debug.Log(nearestPoint.x);
+        Debug.Log(nearestPoint.y);
+        Debug.Log(nearestPoint.z);
 
-        CustomDebug.Print(planeC, colorRed, 100);
-
+    }
+    private void OnDrawGizmos()
+    {
+        CustomDebug.Print(planeC, colorRed, 10);
     }
 }

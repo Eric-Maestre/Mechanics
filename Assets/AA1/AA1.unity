@@ -679,18 +679,18 @@ MonoBehaviour:
       y: 2
       z: 3
   point:
-    x: 0.5
-    y: 0.5
-    z: 0.5
+    x: 5
+    y: 0
+    z: 6
   planeC:
     position:
-      x: 5
-      y: 5
-      z: 5
+      x: 0
+      y: 0
+      z: 0
     normal:
-      x: 4
-      y: 4
-      z: 4
+      x: 0
+      y: 0
+      z: 0
 --- !u!4 &1129602377
 Transform:
   m_ObjectHideFlags: 0
