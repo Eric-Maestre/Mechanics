@@ -29,6 +29,14 @@ public struct CapsuleC
     {
         return false;
     }
+    public Vector3C NearestPoint(Vector3C point)
+    {
+        return new Vector3C();
+    }
+    public Vector3C IntersectionWithLine(LineC line)
+    {
+        return new Vector3C();
+    }
     public bool Equals(CapsuleC other)
     {
         Vector3C AB = this.positionA - this.positionB;

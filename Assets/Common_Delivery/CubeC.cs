@@ -22,6 +22,25 @@ public struct CubeC
     #endregion
 
     #region METHODS
+    public bool isInside()
+    {
+        return false;
+    }
+    public Vector3C NearestPoint(Vector3C point)
+    {
+        return new Vector3C();
+    }
+    public Vector3C IntersectionWithLine(LineC line)
+    {
+        return new Vector3C();
+    }
+    public bool Equals(CubeC cube)
+    {
+        if(this.scale == cube.scale && this.rotation == cube.rotation && this.radius == cube.radius)
+            return true;
+        else
+            return false;
+    }
     #endregion
 
     #region FUNCTIONS
