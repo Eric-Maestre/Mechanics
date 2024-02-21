@@ -50,7 +50,7 @@ public struct PlaneC
     #endregion
 
     #region METHODS
-    public (float A, float B, float C, float D) adada()
+    public (float A, float B, float C, float D) ToEquation()
     {
         return (0, 0, 0, 0);
     }

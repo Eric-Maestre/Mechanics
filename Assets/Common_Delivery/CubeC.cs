@@ -4,6 +4,8 @@ using System;
 public struct CubeC
 {
     #region FIELDS
+    Vector3C position;
+    float scale, rotation, radius;
     #endregion
 
     #region PROPIERTIES
@@ -13,6 +15,10 @@ public struct CubeC
     #endregion
 
     #region OPERATORS
+    //public static bool operator >(Vector3C a, Vector3C b)
+    //{
+    //    return (a.x == b.x) && (a.y == b.y) && (a.z == b.z);
+    //}
     #endregion
 
     #region METHODS
