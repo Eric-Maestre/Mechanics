@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Common_Delivery\SphereC.cs" />
+    <Compile Include="Assets\Tests\Test1.cs" />
     <Compile Include="Assets\Common_Delivery\CustomDebug.cs" />
     <Compile Include="Assets\AA2_Delivery\AA2_Rigidbody.cs" />
     <Compile Include="Assets\AA1_Delivery\AA1_ParticleSystem.cs" />
