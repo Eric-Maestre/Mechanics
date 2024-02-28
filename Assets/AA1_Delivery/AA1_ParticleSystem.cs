@@ -37,16 +37,17 @@ public class AA1_ParticleSystem
     }
     public SettingsCollision settingsCollision;
 
-
-
     public struct Particle
     {
         public Vector3C position;
         public Vector3C lastPosition;
         public Vector3C acceleration;
         public float size;
+        public void AddForce(Vector3C force)
+        {
+            acceleration += force;
+        }
     }
-
     public Particle[] Update(float dt)
     {
         Particle[] particles = new Particle[10];

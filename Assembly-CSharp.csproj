@@ -73,6 +73,7 @@
     <Compile Include="Assets\AA2\AA2_CubeRenderer.cs" />
     <Compile Include="Assets\Common_Delivery\PlaneC.cs" />
     <Compile Include="Assets\Common_Delivery\CubeC.cs" />
+    <Compile Include="Assets\SimpleEuler.cs" />
     <Compile Include="Assets\Common_Delivery\LineC.cs" />
   </ItemGroup>
   <ItemGroup>
