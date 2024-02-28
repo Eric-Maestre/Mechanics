@@ -6,6 +6,7 @@ public struct LineC
     #region FIELDS
     public Vector3C origin;
     public Vector3C direction;
+
     #endregion
 
     #region PROPIERTIES
@@ -23,14 +24,14 @@ public struct LineC
     #endregion
 
     #region METHODS
-    #endregion
-    public  Vector3C NearestPointToPoint(Vector3C point)
+    public Vector3C NearestPointToPoint(Vector3C point)
     {
         Vector3C vector = point - origin;
         float dot = Vector3C.Dot(vector, direction.normalized);
         Vector3C nearestPoint = origin + direction.normalized * dot;
         return nearestPoint;
     }
+    #endregion
 
     #region FUNCTIONS
     public static LineC From(Vector3C pointA, Vector3C pointB )

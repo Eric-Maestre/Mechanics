@@ -83,7 +83,7 @@ public struct PlaneC
     }
     public bool Equals(PlaneC other)
     {
-        if(this.normal ==  other.normal) 
+        if(this.normal == other.normal) 
             return true;
         else
             return false;
