@@ -63,6 +63,10 @@ public class AA1_ParticleSystem
         public Vector3C acceleration;
         public float size;
         public float life;
+
+        private float timeOfCreation;
+
+        public bool alive;
         public void AddForce(Vector3C force)
         {
             acceleration += force;
@@ -70,24 +74,43 @@ public class AA1_ParticleSystem
     }
     Random rnd = new Random();
     Particle[] particles = null;
+    Particle[] aliveParticles = null;
     private float time = 0;
+
+    private LineC cascade;
     public Particle[] Update(float dt)
     {
         if(time == 0)
         {
+            cascade = new LineC(settingsCascade.PointA, settingsCascade.PointB);
             particles = new Particle[settings.poolCapacity];
-            for (int i = 0; i < particles.Length; ++i)
+            for(int i = 0; i < particles.Length; i++)
             {
-                particles[i].position = new Vector3C((float)rnd.NextDouble(), 0.0f, 0);
-                particles[i].size = 0.1f;
+                particles[i].alive = false;
             }
         }
+
+        UpdateCascade(dt);
+
         for (int i = 0; i < particles.Length; ++i)
         {
+            if (particles[i].alive)
             particles[i].position += settings.gravity * dt;
         }
             time += dt;
         return particles;
+    }
+
+    public int UpdateCascade(float dt)
+    {
+        double this = rnd.NextDouble();
+
+        return 0;
+    }
+
+    public void Activeparticles(int particles)
+    {
+
     }
 
     public void Debug()
