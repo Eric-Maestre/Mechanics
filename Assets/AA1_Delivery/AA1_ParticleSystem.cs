@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TreeEditor;
 
 [System.Serializable]
@@ -60,11 +61,12 @@ public class AA1_ParticleSystem
     {
         public Vector3C position;
         public Vector3C lastPosition;
+        //esto es velocidad
         public Vector3C acceleration;
         public float size;
         public float life;
 
-        private float timeOfCreation;
+        public float timeOfCreation;
 
         public bool alive;
         public void AddForce(Vector3C force)
@@ -74,12 +76,13 @@ public class AA1_ParticleSystem
     }
     Random rnd = new Random();
     Particle[] particles = null;
-    Particle[] aliveParticles = null;
+    List<Particle> aliveParticles = null;
     private float time = 0;
 
     private LineC cascade;
     public Particle[] Update(float dt)
     {
+
         if(time == 0)
         {
             cascade = new LineC(settingsCascade.PointA, settingsCascade.PointB);
@@ -94,23 +97,87 @@ public class AA1_ParticleSystem
 
         for (int i = 0; i < particles.Length; ++i)
         {
-            if (particles[i].alive)
             particles[i].position += settings.gravity * dt;
+            particles[i].position += particles[i].acceleration * dt;
+            if (particles[i].life <= time - particles[i].timeOfCreation)
+            {
+                particles[i].alive = false;
+            }
         }
             time += dt;
-        return particles;
+
+        AddAliveParticles();
+
+        return aliveParticles.ToArray();
     }
 
-    public int UpdateCascade(float dt)
+    public void UpdateCascade(float dt)
     {
-        double this = rnd.NextDouble();
+        double something = rnd.NextDouble();
+        int particlesThisSecond = RandomMinMaxInt(something, 0, 1, settingsCascade.minimumParticlesPerSecond, settingsCascade.maximumParticlesPerSecond);
 
-        return 0;
+        for(int i = 0; i < particlesThisSecond; i++)
+        {
+            for (int j = 0; i < particles.Length; j++)
+            {
+                if (!particles[i].alive)
+                    particles[i].alive = true;  
+                else
+                    return;
+
+                double x = rnd.NextDouble();
+                double y = rnd.NextDouble();
+                double z = rnd.NextDouble();
+
+                particles[i].position.x = RandomMinMaxFloat(x, 0, 1, settingsCascade.PointA.x, settingsCascade.PointB.x);
+                particles[i].position.y = RandomMinMaxFloat(y, 0, 1, settingsCascade.PointA.y, settingsCascade.PointB.y);
+                particles[i].position.z = RandomMinMaxFloat(z, 0, 1, settingsCascade.PointA.z, settingsCascade.PointB.z);
+
+                double randomForce = rnd.NextDouble();
+                float force = RandomMinMaxFloat(randomForce, 0, 1, settingsCascade.minimumForce, settingsCascade.maximumForce);
+
+                Vector3C forceDirection = settingsCascade.direction.normalized;
+
+                if(settingsCascade.randomDirection)
+                {
+                    double randDir = rnd.NextDouble();
+                    forceDirection.x = forceDirection.x * (float)randDir;
+                    forceDirection.y = forceDirection.y * (float)randDir;
+                    forceDirection.z = forceDirection.z * (float)randDir;
+                }
+                particles[i].acceleration = forceDirection * force;
+
+                double randomLife = rnd.NextDouble();
+                particles[i].life = RandomMinMaxFloat(randomLife,0,1, settingsCascade.minimumParticlesLife, settingsCascade.maximumParticlesLife);
+
+                particles[i].timeOfCreation = time;
+            }
+        }
     }
 
-    public void Activeparticles(int particles)
+    private void AddAliveParticles()
     {
+        aliveParticles = new List<Particle>();
 
+        for(int i = 0; i < particles.Length; i++)
+        {
+            if (particles[i].alive)
+            {
+                aliveParticles.Add(particles[i]);
+                UnityEngine.Debug.Log("Shit happens");
+            }
+        }
+    }
+
+    private int RandomMinMaxInt (double inputD, float min, float max, float minExpected, float maxExpected)
+    {
+        float result = minExpected + ((float)inputD - min) * (maxExpected - minExpected) / (max - min);
+        return (int)result;
+    }
+
+    private float RandomMinMaxFloat(double inputD, float min, float max, float minExpected, float maxExpected)
+    {
+        return minExpected + ((float)inputD - min) * (maxExpected - minExpected) / (max - min);
     }
 
     public void Debug()
