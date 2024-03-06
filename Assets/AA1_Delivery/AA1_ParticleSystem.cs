@@ -76,7 +76,7 @@ public class AA1_ParticleSystem
     }
     Random rnd = new Random();
     Particle[] particles = null;
-    List<Particle> aliveParticles = null;
+    List<Particle> aliveParticles = new List<Particle>();
     private float time = 0;
 
     private LineC cascade;
@@ -116,11 +116,15 @@ public class AA1_ParticleSystem
         double something = rnd.NextDouble();
         int particlesThisSecond = RandomMinMaxInt(something, 0, 1, settingsCascade.minimumParticlesPerSecond, settingsCascade.maximumParticlesPerSecond);
 
-        for(int i = 0; i < particlesThisSecond; i++)
+        int counter = 0;
+
+        for(int i = 0; i < particles.Length; i++)
         {
-            for (int j = 0; i < particles.Length; j++)
-            {
-                if (!particles[i].alive)
+
+            if (particlesThisSecond <= counter)
+                return;
+
+            if (!particles[i].alive)
                     particles[i].alive = true;  
                 else
                     return;
@@ -151,13 +155,14 @@ public class AA1_ParticleSystem
                 particles[i].life = RandomMinMaxFloat(randomLife,0,1, settingsCascade.minimumParticlesLife, settingsCascade.maximumParticlesLife);
 
                 particles[i].timeOfCreation = time;
-            }
+
+            counter++;
         }
     }
 
     private void AddAliveParticles()
     {
-        aliveParticles = new List<Particle>();
+        aliveParticles.Clear();
 
         for(int i = 0; i < particles.Length; i++)
         {
