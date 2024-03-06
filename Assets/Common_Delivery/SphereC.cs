@@ -29,11 +29,14 @@ public struct SphereC
     #region METHODS
     public bool IsInside(SphereC other)
     {
-        return false;
+        float distanceFromCenter = other.position.Magnitude() - position.Magnitude();
+        return radius - distanceFromCenter > 0;
     }
     public Vector3C NearestPoint(Vector3C point)
     {
-        return new Vector3C();
+        Vector3C pointToCenterVector = point - position;
+        pointToCenterVector.Normalize();
+        return pointToCenterVector * radius;
     }
     public Vector3C IntersectionWithLine(LineC line)
     {
