@@ -5,9 +5,6 @@ using TreeEditor;
 [System.Serializable]
 public class AA1_ParticleSystem
 {
-
-    
-
     [System.Serializable]
     public struct Settings
     {

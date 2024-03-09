@@ -159,7 +159,7 @@ MonoBehaviour:
   cascadeB: {fileID: 2040244667}
   system:
     settings:
-      poolCapacity: 10
+      poolCapacity: 1
       gravity:
         x: 0
         y: -0.98
@@ -219,6 +219,38 @@ MonoBehaviour:
           x: 1
           y: 0
           z: 0
+      - position:
+          x: -0.5
+          y: 0
+          z: 0
+        normal:
+          x: 1
+          y: 0
+          z: 0
+      - position:
+          x: 0
+          y: 0.5
+          z: 0
+        normal:
+          x: 0
+          y: 1
+          z: 0
+      - position:
+          x: 0
+          y: 0
+          z: 0.5
+        normal:
+          x: 0
+          y: 0
+          z: 1
+      - position:
+          x: 0
+          y: 0
+          z: -0.5
+        normal:
+          x: 0
+          y: 0
+          z: 1
       spheres:
       - position:
           x: 0
@@ -665,7 +697,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1129602377}
-  - component: {fileID: 1129602376}
   m_Layer: 0
   m_Name: Tests
   m_TagString: Untagged
@@ -673,40 +704,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1129602376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1129602375}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8204de9170deacd448d36b020564a547, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lineC:
-    origin:
-      x: 3
-      y: 2
-      z: -2
-    direction:
-      x: 1
-      y: 2
-      z: 3
-  point:
-    x: 5
-    y: 0
-    z: 6
-  planeC:
-    position:
-      x: 0
-      y: 0
-      z: 0
-    normal:
-      x: 0
-      y: 0
-      z: 0
 --- !u!4 &1129602377
 Transform:
   m_ObjectHideFlags: 0
