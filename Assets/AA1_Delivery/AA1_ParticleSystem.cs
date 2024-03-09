@@ -87,6 +87,7 @@ public class AA1_ParticleSystem
             for(int i = 0; i < particles.Length; i++)
             {
                 particles[i].alive = false;
+                particles[i].size = 0.1f;
             }
         }
 
@@ -115,16 +116,12 @@ public class AA1_ParticleSystem
 
         int counter = 0;
 
-        for(int i = 0; i < particles.Length; i++)
+        for(int i = 0; i < particles.Length || counter >= particlesThisSecond; i++)
         {
 
-            if (particlesThisSecond <= counter)
-                return;
-
             if (!particles[i].alive)
-                    particles[i].alive = true;  
-                else
-                    return;
+            {
+                particles[i].alive = true;
 
                 double x = rnd.NextDouble();
                 double y = rnd.NextDouble();
@@ -139,7 +136,7 @@ public class AA1_ParticleSystem
 
                 Vector3C forceDirection = settingsCascade.direction.normalized;
 
-                if(settingsCascade.randomDirection)
+                if (settingsCascade.randomDirection)
                 {
                     double randDir = rnd.NextDouble();
                     forceDirection.x = forceDirection.x * (float)randDir;
@@ -149,11 +146,13 @@ public class AA1_ParticleSystem
                 particles[i].acceleration = forceDirection * force;
 
                 double randomLife = rnd.NextDouble();
-                particles[i].life = RandomMinMaxFloat(randomLife,0,1, settingsCascade.minimumParticlesLife, settingsCascade.maximumParticlesLife);
+                particles[i].life = RandomMinMaxFloat(randomLife, 0, 1, settingsCascade.minimumParticlesLife, settingsCascade.maximumParticlesLife);
 
                 particles[i].timeOfCreation = time;
 
-            counter++;
+                counter++;
+            }
+
         }
     }
 
@@ -166,7 +165,6 @@ public class AA1_ParticleSystem
             if (particles[i].alive)
             {
                 aliveParticles.Add(particles[i]);
-                UnityEngine.Debug.Log("Shit happens");
             }
         }
     }
