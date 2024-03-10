@@ -86,12 +86,13 @@ public class AA1_ParticleSystem
             particles = new Particle[settings.poolCapacity];
             for(int i = 0; i < particles.Length; i++)
             {
-                particles[i].alive = false;
+                particles[i].alive = true;
                 particles[i].size = 0.1f;
             }
         }
 
-        UpdateCascade(dt);
+        UpdateCascade();
+        UpdateCannon();
 
         for (int i = 0; i < particles.Length; ++i)
         {
@@ -101,6 +102,7 @@ public class AA1_ParticleSystem
             {
                 particles[i].alive = false;
             }
+
             for (int j = 0; j < settingsCollision.planes.Length; ++j)
             {
                 Vector3C distanceVector = particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position);
@@ -122,15 +124,16 @@ public class AA1_ParticleSystem
         return aliveParticles.ToArray();
     }
 
-    public void UpdateCascade(float dt)
+    public void UpdateCascade()
     {
         double something = rnd.NextDouble();
         int particlesThisSecond = RandomMinMaxInt(something, 0, 1, settingsCascade.minimumParticlesPerSecond, settingsCascade.maximumParticlesPerSecond);
 
         int counter = 0;
+        int i = 0;
 
-        for(int i = 0; i < particles.Length || counter >= particlesThisSecond; i++)
-        {
+        while (i < particles.Length && counter < particlesThisSecond)
+        { 
 
             if (!particles[i].alive)
             {
@@ -165,7 +168,48 @@ public class AA1_ParticleSystem
 
                 counter++;
             }
+            i++;
 
+        }
+    }
+
+    public void UpdateCannon()
+    {
+        double something = rnd.NextDouble();
+        int particlesThisSecond = RandomMinMaxInt(something, 0, 1, settingsCascade.minimumParticlesPerSecond, settingsCascade.maximumParticlesPerSecond);
+
+        int counter = 0;
+        int i = 0;
+
+        while (i < particles.Length && counter < particlesThisSecond)
+        {
+            if (!particles[i].alive)
+            {
+                particles[i].alive = true;
+
+                particles[i].position = settingsCannon.Start;
+
+                double randomForce = rnd.NextDouble();
+                float force = RandomMinMaxFloat(randomForce, 0, 1, settingsCannon.minimumForce, settingsCannon.maximumForce);
+
+                Vector3C forceDirection = settingsCannon.Direction.normalized;
+
+                double randomAngle = rnd.NextDouble();
+                float angle = RandomMinMaxFloat(randomAngle, 0, 1, 0, settingsCannon.angle);
+
+                particles[i].acceleration = forceDirection * force;
+
+                double randomLife = rnd.NextDouble();
+                particles[i].life = RandomMinMaxFloat(randomLife, 0, 1, settingsCannon.minimumParticlesLife, settingsCannon.maximumParticlesLife);
+
+                particles[i].timeOfCreation = time;
+
+                counter++;
+
+
+            }
+
+            i++;
         }
     }
 
