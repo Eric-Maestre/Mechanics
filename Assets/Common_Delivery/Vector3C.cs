@@ -108,7 +108,7 @@ public struct Vector3C
     }
     public float Magnitude()
     {
-        return (float)Math.Sqrt(x+y+z);
+        return (float)Math.Sqrt(Math.Sqrt(Math.Pow(x, 2)) + Math.Sqrt(Math.Pow(y, 2)) + Math.Sqrt(Math.Pow(z, 2)));
     }
     public override bool Equals(object obj)
     {

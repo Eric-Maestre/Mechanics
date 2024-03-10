@@ -101,6 +101,19 @@ public class AA1_ParticleSystem
             {
                 particles[i].alive = false;
             }
+            for (int j = 0; j < settingsCollision.planes.Length; ++j)
+            {
+                Vector3C distanceVector = particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position);
+                float distance = distanceVector.magnitude;
+                if (distance < particles[i].size )
+                {
+                    UnityEngine.Debug.Log("Collision");
+                    Vector3C particleDirection = particles[i].position - particles[i].lastPosition;
+                    Vector3C bounceDirection = new Vector3C(particleDirection.x * -1, particleDirection.y * -1, particleDirection.z * -1);
+                    //bounceDirection.Normalize();
+                    particles[i].AddForce(bounceDirection*0.5f/**particles[i].acceleration * settings.bounce*/);
+                }
+            }
         }
             time += dt;
 
