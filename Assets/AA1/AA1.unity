@@ -159,7 +159,7 @@ MonoBehaviour:
   cascadeB: {fileID: 2040244667}
   system:
     settings:
-      poolCapacity: 1
+      poolCapacity: 20
       gravity:
         x: 0
         y: -0.98
@@ -192,15 +192,15 @@ MonoBehaviour:
         z: 0
       Direction:
         x: 1
-        y: 2
-        z: -1
+        y: 1
+        z: 0
       angle: 50
       maximumForce: 0.2
       minimumForce: 0.5
       minimumParticlesPerSecond: 2
       maximumParticlesPerSecond: 6
-      minimumParticlesLife: 0.2
-      maximumParticlesLife: 0.3
+      minimumParticlesLife: 0.5
+      maximumParticlesLife: 0.8
     settingsCollision:
       planes:
       - position:

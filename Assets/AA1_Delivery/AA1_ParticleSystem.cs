@@ -86,7 +86,7 @@ public class AA1_ParticleSystem
             particles = new Particle[settings.poolCapacity];
             for(int i = 0; i < particles.Length; i++)
             {
-                particles[i].alive = true;
+                particles[i].alive = false;
                 particles[i].size = 0.1f;
             }
         }
@@ -150,7 +150,7 @@ public class AA1_ParticleSystem
                 double randomForce = rnd.NextDouble();
                 float force = RandomMinMaxFloat(randomForce, 0, 1, settingsCascade.minimumForce, settingsCascade.maximumForce);
 
-                Vector3C forceDirection = settingsCascade.direction.normalized;
+                Vector3C forceDirection = settingsCannon.Direction.normalized;
 
                 if (settingsCascade.randomDirection)
                 {
@@ -197,7 +197,7 @@ public class AA1_ParticleSystem
                 double randomAngle = rnd.NextDouble();
                 float angle = RandomMinMaxFloat(randomAngle, 0, 1, 0, settingsCannon.angle);
 
-                particles[i].acceleration = forceDirection * force;
+                particles[i].acceleration = (forceDirection) * force;
 
                 double randomLife = rnd.NextDouble();
                 particles[i].life = RandomMinMaxFloat(randomLife, 0, 1, settingsCannon.minimumParticlesLife, settingsCannon.maximumParticlesLife);
