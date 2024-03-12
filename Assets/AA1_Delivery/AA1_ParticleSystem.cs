@@ -96,7 +96,8 @@ public class AA1_ParticleSystem
 
         for (int i = 0; i < particles.Length; ++i)
         {
-            particles[i].position += settings.gravity * dt;
+            //particles[i].position += settings.gravity * dt;
+            particles[i].AddForce(settings.gravity * dt);
             particles[i].position += particles[i].acceleration * dt;
             if (particles[i].life <= time - particles[i].timeOfCreation)
             {
@@ -107,13 +108,13 @@ public class AA1_ParticleSystem
             {
                 Vector3C distanceVector = particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position);
                 float distance = distanceVector.magnitude;
-                if (distance < particles[i].size )
+                if (distance < particles[i].size)
                 {
-                    UnityEngine.Debug.Log("Collision");
                     Vector3C particleDirection = particles[i].position - particles[i].lastPosition;
-                    Vector3C bounceDirection = new Vector3C(particleDirection.x * -1, particleDirection.y * -1, particleDirection.z * -1);
-                    //bounceDirection.Normalize();
-                    particles[i].AddForce(bounceDirection*0.5f/**particles[i].acceleration * settings.bounce*/);
+                    float particleLastAcceleration = particles[i].acceleration.magnitude;
+                    Vector3C accelNullifier = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.x, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.y, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.z, 2)));
+                    particles[i].acceleration *= accelNullifier;
+                    particles[i].AddForce(settingsCollision.planes[j].normal * settings.bounce * particleLastAcceleration * -(particleDirection.normalized));
                 }
             }
         }
@@ -162,7 +163,9 @@ public class AA1_ParticleSystem
                 particles[i].acceleration = forceDirection * force;
 
                 double randomLife = rnd.NextDouble();
-                particles[i].life = RandomMinMaxFloat(randomLife, 0, 1, settingsCascade.minimumParticlesLife, settingsCascade.maximumParticlesLife);
+                //particles[i].life = RandomMinMaxFloat(randomLife, 0, 1, settingsCascade.minimumParticlesLife, settingsCascade.maximumParticlesLife);
+                
+                particles[i].life = 10;//To experiment
 
                 particles[i].timeOfCreation = time;
 
