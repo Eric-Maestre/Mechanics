@@ -29,8 +29,8 @@ public struct SphereC
     #region METHODS
     public bool IsInside(SphereC other)
     {
-        float distanceFromCenter = other.position.Magnitude() - position.Magnitude();
-        return radius - distanceFromCenter > 0;
+        Vector3C distanceFromCenter = other.position - position;
+        return radius - distanceFromCenter.magnitude > 0;
     }
     public Vector3C NearestPoint(Vector3C point)
     {

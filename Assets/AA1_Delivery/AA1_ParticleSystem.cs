@@ -108,13 +108,67 @@ public class AA1_ParticleSystem
             {
                 Vector3C distanceVector = particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position);
                 float distance = distanceVector.magnitude;
-                if (distance < particles[i].size)
+                bool collision = false;
+                bool passed = false;
+                bool distanceMin = true;
+                if (distance > particles[i].size)
+                    distanceMin = true;
+                if (distance < 0)
+                    passed = true;
+                if (distance < particles[i].size && distanceMin)
+                    collision = true;
+                if (collision)
+                {
+                    if (passed)
+                    {
+                        particles[i].position = settingsCollision.planes[j].NearestPoint(particles[i].position);
+                        passed = false;
+                    }
+                    //Vector3C particleDirection = particles[i].position - particles[i].lastPosition;
+                    //float particleLastAcceleration = particles[i].acceleration.magnitude;
+                    //Vector3C accelNullifier = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.x, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.y, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.z, 2)));
+                    Vector3C accelInversor = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.x*2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.y*2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.z*2, 2)));
+                    particles[i].acceleration *= accelInversor;
+                    particles[i].acceleration *= settings.bounce;
+                    collision = false;
+                    distanceMin = false;
+                    //particles[i].AddForce(settingsCollision.planes[j].normal * - settings.bounce);
+
+                    //particles[i].acceleration *= accelNullifier;
+                    //particles[i].AddForce(settingsCollision.planes[j].normal * settings.bounce * 1.4f*particleLastAcceleration * -(particleDirection.normalized));
+                }
+            }
+            //SPHERES
+            for (int k = 0; k < settingsCollision.spheres.Length; ++k)
+            {
+                bool collision = false;
+                bool beenOutside = true;
+                SphereC particle = new SphereC(particles[i].position, particles[i].size);
+                if (settingsCollision.spheres[k].IsInside(particle) && beenOutside)
+                {
+                    UnityEngine.Debug.Log("SphereCollision");
+                    collision = true;
+                }
+                if(!settingsCollision.spheres[k].IsInside(particle))
+                {
+                    beenOutside = true;
+                }
+                if (collision)
                 {
                     Vector3C particleDirection = particles[i].position - particles[i].lastPosition;
-                    float particleLastAcceleration = particles[i].acceleration.magnitude;
-                    Vector3C accelNullifier = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.x, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.y, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.z, 2)));
-                    particles[i].acceleration *= accelNullifier;
-                    particles[i].AddForce(settingsCollision.planes[j].normal * settings.bounce * particleLastAcceleration * -(particleDirection.normalized));
+                    Vector3C particleLastAcceleration = particles[i].acceleration;
+                    //Vector3C accelNullifier = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.x, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.y, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.z, 2)));
+                    //Vector3C accelInversor = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.x * 2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.y * 2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.z * 2, 2)));
+                    //particles[i].acceleration *= accelInversor;
+                    //particles[i].acceleration *= settings.bounce;
+                    
+                    //particles[i].AddForce(settingsCollision.planes[j].normal * - settings.bounce);
+
+                    //particles[i].acceleration *= accelNullifier;
+                    //particles[i].AddForce(particleLastAcceleration * -(particleDirection.normalized) * settings.bounce);
+                    particles[i].acceleration *= 0;
+                    beenOutside = false;
+                    collision = false;
                 }
             }
         }

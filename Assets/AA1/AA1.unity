@@ -159,7 +159,7 @@ MonoBehaviour:
   cascadeB: {fileID: 2040244667}
   system:
     settings:
-      poolCapacity: 20
+      poolCapacity: 1
       gravity:
         x: 0
         y: -0.980655
@@ -256,7 +256,7 @@ MonoBehaviour:
           x: 0
           y: 0
           z: 0
-        radius: 0.3
+        radius: 0.5
       capsules:
       - positionA:
           x: 0
