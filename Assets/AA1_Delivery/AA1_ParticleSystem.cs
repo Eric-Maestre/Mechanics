@@ -200,6 +200,16 @@ public class AA1_ParticleSystem
                 double randomAngle = rnd.NextDouble();
                 float angle = RandomMinMaxFloat(randomAngle, 0, 1, 0, settingsCannon.angle);
 
+                double randomEje = rnd.NextDouble();
+                int eje = RandomMinMaxInt(randomEje, 0,1, 0, 2);
+
+                if (eje == 0)
+                    forceDirection = RotateAroundX(forceDirection, angle).normalized;
+                else if(eje == 1)
+                    forceDirection = RotateAroundY(forceDirection, angle).normalized;
+                else
+                    forceDirection = RotateAroundZ(forceDirection, angle).normalized;
+
                 particles[i].acceleration = (forceDirection) * force;
 
                 double randomLife = rnd.NextDouble();
@@ -239,6 +249,43 @@ public class AA1_ParticleSystem
     {
         return minExpected + ((float)inputD - min) * (maxExpected - minExpected) / (max - min);
     }
+
+    Vector3C RotateAroundX(Vector3C input, float angleInDegrees)
+    {
+        float angleInRadians = UnityEngine.Mathf.Deg2Rad * angleInDegrees;
+        float cosAngle = UnityEngine.Mathf.Cos(angleInRadians);
+        float sinAngle = UnityEngine.Mathf.Sin(angleInRadians);
+        return new Vector3C(
+           input.x,
+           cosAngle * input.y - sinAngle * input.z,
+           sinAngle * input.y + cosAngle * input.z
+       );
+    }
+
+    Vector3C RotateAroundY(Vector3C input, float angleInDegrees)
+    {
+        float angleInRadians = UnityEngine.Mathf.Deg2Rad * angleInDegrees;
+        float cosAngle = UnityEngine.Mathf.Cos(angleInRadians);
+        float sinAngle = UnityEngine.Mathf.Sin(angleInRadians);
+        return new Vector3C(
+             cosAngle * input.x + sinAngle * input.z,
+            input.y,
+            -sinAngle * input.x + cosAngle * input.z
+       );
+    }
+
+    Vector3C RotateAroundZ(Vector3C input, float angleInDegrees)
+    {
+        float angleInRadians = UnityEngine.Mathf.Deg2Rad * angleInDegrees;
+        float cosAngle = UnityEngine.Mathf.Cos(angleInRadians);
+        float sinAngle = UnityEngine.Mathf.Sin(angleInRadians);
+        return new Vector3C(
+           cosAngle * input.x - sinAngle * input.y,
+            sinAngle * input.x + cosAngle * input.y,
+            input.z
+       );
+    }
+
 
     public void Debug()
     {
