@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using TreeEditor;
+using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
 [System.Serializable]
 public class AA1_ParticleSystem
@@ -104,6 +105,7 @@ public class AA1_ParticleSystem
         for (int i = 0; i < particles.Length; ++i)
         {
             particles[i].AddForce(settings.gravity * dt);
+            particles[i].lastPosition = particles[i].position;
             particles[i].position += particles[i].acceleration * dt;
             if (particles[i].life <= time - particles[i].timeOfCreation)
             {
@@ -126,18 +128,18 @@ public class AA1_ParticleSystem
                     int counter = 2;
                     while (passed)
                     {
-                        particles[i].position -= (particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position)) * -2f;
+                        //particles[i].position -= (particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position)) * 2f;
                         //particles[i].position = particles[i].lastPosition;
                         //particles[i].position = particles[i].lastPosition;
                         //particles[i].position += settings.gravity * (dt/counter);
+                        particles[i].position = particles[i].lastPosition;
+                        distanceVector = particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position);
+                        distance = distanceVector.magnitude;
 
-                        //distanceVector = particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position);
-                        //distance = distanceVector.magnitude;
-
-                        //if(distance > 0)
-                        //    passed = false;
-                        //else
-                        //    counter*=2;
+                        if (distance > 0)
+                            passed = false;
+                        else
+                            counter *= 2;
                     }
                     //Calcular componente normal
                     float vnMagnitude = Vector3C.Dot(particles[i].acceleration, settingsCollision.planes[j].normal);
@@ -160,15 +162,33 @@ public class AA1_ParticleSystem
             {
                 bool collision = false;
                 float factor = particles[i].size;
-
-                float distance = (particles[i].position - settingsCollision.spheres[k].position).magnitude;
-                float effectiveParticleRadius = particles[i].size / 2.0f;
-
-                if (distance <= settingsCollision.spheres[k].radius + effectiveParticleRadius + factor*7.5f)
+                bool passed = false;
+                Vector3C nearestPoint = settingsCollision.spheres[k].NearestPoint(particles[i].position);
+                Vector3C distanceVector = nearestPoint - particles[i].position;
+                
+                float distance = distanceVector.magnitude;
+                if (distance <= factor * 2)
+                    passed = true;
+                if (distance <= settingsCollision.spheres[k].radius + particles[i].size + factor)
                 {
                     UnityEngine.Debug.Log("SphereCollision");
                     collision = true;
+                    int counter = 2;
+                    while (passed)
+                    {
+                        //particles[i].position -= (particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position)) * 2f;
+                        //particles[i].position = particles[i].lastPosition;
+                        //particles[i].position = particles[i].lastPosition;
+                        //particles[i].position += settings.gravity * (dt/counter);
+                        particles[i].position = particles[i].lastPosition;
+                        distanceVector = particles[i].position - settingsCollision.spheres[k].NearestPoint(particles[i].position);
+                        distance = distanceVector.magnitude;
 
+                        if (distance > 0)
+                            passed = false;
+                        else
+                            counter *= 2;
+                    }
 
                     //NearestPoint circulo a la partícula
                     //Usando la distancia de este punto al centro hago un vector que me servira como normal
@@ -183,8 +203,8 @@ public class AA1_ParticleSystem
                     Vector3C vt = particles[i].acceleration - vn;
                     //Calcular nueva velocidad
                     Vector3C newVelocity = -vn + vt;
-                    particles[i].acceleration *= 0;
-                    //particles[i].AddForce(-(particles[i].acceleration));
+                    //particles[i].acceleration *= 0;
+                    particles[i].AddForce(-(particles[i].acceleration));
                     particles[i].AddForce(newVelocity * settings.bounce);
                 }
                 //been Outside eliminado, no hacía nada
@@ -208,7 +228,7 @@ public class AA1_ParticleSystem
                 //}
             }
             //CAPSULES
-            //Vector v del punto a la partícula
+            //Vector v del punto A a la partícula
             //Vector w del punto A al punto B
             //Proyección del vector v en el vector w
             //Crear vector entre el final de la proyección y la partícula
@@ -216,13 +236,26 @@ public class AA1_ParticleSystem
             {
                 bool collision = false;
                 float factor = particles[i].size;
+                Vector3C particulaPuntoA = particles[i].position - settingsCollision.capsules[l].positionA;
+                Vector3C BA = settingsCollision.capsules[l].positionB - settingsCollision.capsules[l].positionA;
+                float proyeccionVenWValue = (Vector3C.Dot(particulaPuntoA, BA));
+                Vector3C proyeccionVenW = BA.normalized * proyeccionVenWValue;
+                Vector3C particleNearestCapsulePoint = particles[i].position - proyeccionVenW;
+
+                float dist = particleNearestCapsulePoint.magnitude;
+
+                if (dist <= factor)
+                {
+
+                }
 
                 float distance = (particles[i].position - settingsCollision.spheres[l].position).magnitude;
                 float effectiveParticleRadius = particles[i].size / 2.0f;
 
-                if (distance <= settingsCollision.spheres[l].radius + effectiveParticleRadius + factor)
+                if (distance <= settingsCollision.spheres[l].radius + effectiveParticleRadius + factor
+                    )
                 {
-                    UnityEngine.Debug.Log("SphereCollision");
+                    UnityEngine.Debug.Log("CapsuleCollision");
                     collision = true;
 
 

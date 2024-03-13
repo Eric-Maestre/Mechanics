@@ -39,9 +39,10 @@ public struct SphereC
     }
     public Vector3C NearestPoint(Vector3C point)
     {
+        UnityEngine.Debug.Log(radius);
         Vector3C pointToCenterVector = point - position;
         pointToCenterVector.Normalize();
-        return pointToCenterVector * radius;
+        return this.position + (pointToCenterVector * this.radius);
     }
     public Vector3C IntersectionWithLine(LineC line)
     {
