@@ -119,11 +119,16 @@ public class AA1_ParticleSystem
                 {
                     if (passed)
                     {
-                        particles[i].position = settingsCollision.planes[j].NearestPoint(particles[i].position);
+                        particles[i].position -= (particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position)) * 2f;
                         passed = false;
                     }
-                    Vector3C accelInversor = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.x*2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.y*2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.z*2, 2)));
-                    particles[i].acceleration *= accelInversor * settings.bounce;
+                    //Vector3C accelInversor = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.x*2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.y*2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.z*2, 2)));
+                    float projection = Vector3C.Dot(particles[i].acceleration, settingsCollision.planes[j].normal) * -1;
+                    //UnityEngine.Debug.Log(projection);
+                    //Vector3C anulateNormal = new Vector3C(1, 1, 1) - settingsCollision.planes[j].normal;
+                    //particles[i].acceleration *= anulateNormal;
+                    particles[i].AddForce(settingsCollision.planes[j].normal * projection*2 * settings.bounce);
+                    //particles[i].acceleration *= accelInversor * settings.bounce;
                     collision = false;
 
                 }
@@ -134,7 +139,7 @@ public class AA1_ParticleSystem
                 bool collision = false;
                 bool beenOutside = true;
                 float factor = particles[i].size / 2;
-                if (settingsCollision.spheres[k].radius + factor >= (settingsCollision.spheres[k].position - particles[i].position).magnitude)
+                if (settingsCollision.spheres[k].radius + factor*15 >= (particles[i].position - settingsCollision.spheres[k].position).magnitude)
                 {
                     UnityEngine.Debug.Log("SphereCollision");
                     collision = true;
@@ -151,18 +156,20 @@ public class AA1_ParticleSystem
                     //Con un punto y una normal hago un plano
                     //Repito el rebote visto en el plano
 
-                    Vector3C particleDirection = particles[i].position - particles[i].lastPosition;
-                    Vector3C particleLastAcceleration = particles[i].acceleration;
+                    Vector3C normal = settingsCollision.spheres[k].NearestPoint(particles[i].position) - settingsCollision.spheres[k].position;
+                    float projection = Vector3C.Dot(particles[i].acceleration, normal) * -1;
+                    particles[i].AddForce(normal * projection * 2 * settings.bounce);
+
                     //Vector3C accelNullifier = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.x, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.y, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.z, 2)));
                     //Vector3C accelInversor = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.x * 2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.y * 2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.z * 2, 2)));
                     //particles[i].acceleration *= accelInversor;
                     //particles[i].acceleration *= settings.bounce;
-                    
+
                     //particles[i].AddForce(settingsCollision.planes[j].normal * - settings.bounce);
 
                     //particles[i].acceleration *= accelNullifier;
                     //particles[i].AddForce(particleLastAcceleration * -(particleDirection.normalized) * settings.bounce);
-                    particles[i].acceleration *= 0;
+
                     beenOutside = false;
                     collision = false;
                 }
