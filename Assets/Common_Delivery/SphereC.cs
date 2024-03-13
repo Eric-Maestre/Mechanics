@@ -32,6 +32,11 @@ public struct SphereC
         Vector3C distanceFromCenter = other.position - position;
         return radius - distanceFromCenter.magnitude > 0;
     }
+    public bool IsInside(Vector3C other)
+    {
+        Vector3C distanceFromCenter = other - position;
+        return radius - distanceFromCenter.magnitude > 0;
+    }
     public Vector3C NearestPoint(Vector3C point)
     {
         Vector3C pointToCenterVector = point - position;
