@@ -117,16 +117,27 @@ public class AA1_ParticleSystem
                 float factor = particles[i].size;
                 bool collision = false;
                 bool passed = false;
-                if (distance < 0)
+                if (distance <= factor*2)
                     passed = true;
                 if (distance <= particles[i].size + factor)
                     collision = true;
                 if (collision)
                 {
-                    if (passed)
+                    int counter = 2;
+                    while (passed)
                     {
-                        particles[i].position -= (particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position)) * 2f;
-                        passed = false;
+                        particles[i].position -= (particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position)) * -2f;
+                        //particles[i].position = particles[i].lastPosition;
+                        //particles[i].position = particles[i].lastPosition;
+                        //particles[i].position += settings.gravity * (dt/counter);
+
+                        //distanceVector = particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position);
+                        //distance = distanceVector.magnitude;
+
+                        //if(distance > 0)
+                        //    passed = false;
+                        //else
+                        //    counter*=2;
                     }
                     //Calcular componente normal
                     float vnMagnitude = Vector3C.Dot(particles[i].acceleration, settingsCollision.planes[j].normal);
@@ -138,6 +149,7 @@ public class AA1_ParticleSystem
 
                     particles[i].AddForce(-(particles[i].acceleration));
                     particles[i].AddForce(newVelocity * settings.bounce);
+
 
                     collision = false;
 
@@ -152,7 +164,7 @@ public class AA1_ParticleSystem
                 float distance = (particles[i].position - settingsCollision.spheres[k].position).magnitude;
                 float effectiveParticleRadius = particles[i].size / 2.0f;
 
-                if (distance <= settingsCollision.spheres[k].radius + effectiveParticleRadius + factor)
+                if (distance <= settingsCollision.spheres[k].radius + effectiveParticleRadius + factor*7.5f)
                 {
                     UnityEngine.Debug.Log("SphereCollision");
                     collision = true;
@@ -171,6 +183,62 @@ public class AA1_ParticleSystem
                     Vector3C vt = particles[i].acceleration - vn;
                     //Calcular nueva velocidad
                     Vector3C newVelocity = -vn + vt;
+                    particles[i].acceleration *= 0;
+                    //particles[i].AddForce(-(particles[i].acceleration));
+                    particles[i].AddForce(newVelocity * settings.bounce);
+                }
+                //been Outside eliminado, no hacía nada
+                //if (collision)
+                //{
+
+                    
+
+
+                //    //Vector3C accelNullifier = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.x, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.y, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.z, 2)));
+                //    //Vector3C accelInversor = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.x * 2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.y * 2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.z * 2, 2)));
+                //    //particles[i].acceleration *= accelInversor;
+                //    //particles[i].acceleration *= settings.bounce;
+
+                //    //particles[i].AddForce(settingsCollision.planes[j].normal * - settings.bounce);
+
+                //    //particles[i].acceleration *= accelNullifier;
+                //    //particles[i].AddForce(particleLastAcceleration * -(particleDirection.normalized) * settings.bounce);
+
+                //    collision = false;
+                //}
+            }
+            //CAPSULES
+            //Vector v del punto a la partícula
+            //Vector w del punto A al punto B
+            //Proyección del vector v en el vector w
+            //Crear vector entre el final de la proyección y la partícula
+            for (int l = 0; l < settingsCollision.capsules.Length; ++l)
+            {
+                bool collision = false;
+                float factor = particles[i].size;
+
+                float distance = (particles[i].position - settingsCollision.spheres[l].position).magnitude;
+                float effectiveParticleRadius = particles[i].size / 2.0f;
+
+                if (distance <= settingsCollision.spheres[l].radius + effectiveParticleRadius + factor)
+                {
+                    UnityEngine.Debug.Log("SphereCollision");
+                    collision = true;
+
+
+                    //NearestPoint circulo a la partícula
+                    //Usando la distancia de este punto al centro hago un vector que me servira como normal
+                    //Con un punto y una normal hago un plano
+                    //Repito el rebote visto en el plano
+
+                    Vector3C normal = settingsCollision.spheres[l].NearestPoint(particles[i].position) - settingsCollision.spheres[l].position;
+                    //Calcular componente normal
+                    float vnMagnitude = Vector3C.Dot(normal, particles[i].acceleration);
+                    Vector3C vn = normal * vnMagnitude;
+                    //Calcular componente tangencial
+                    Vector3C vt = particles[i].acceleration - vn;
+                    //Calcular nueva velocidad
+                    Vector3C newVelocity = -vn + vt;
 
                     particles[i].AddForce(-(particles[i].acceleration));
                     particles[i].AddForce(newVelocity * settings.bounce);
@@ -179,7 +247,7 @@ public class AA1_ParticleSystem
                 //if (collision)
                 //{
 
-                    
+
 
 
                 //    //Vector3C accelNullifier = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.x, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.y, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.z, 2)));
