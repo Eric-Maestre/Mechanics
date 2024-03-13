@@ -159,7 +159,7 @@ MonoBehaviour:
   cascadeB: {fileID: 2040244667}
   system:
     settings:
-      poolCapacity: 1
+      poolCapacity: 10
       gravity:
         x: 0
         y: -0.980655
@@ -181,10 +181,10 @@ MonoBehaviour:
       randomDirection: 0
       minimumForce: -0.2
       maximumForce: -0.4
-      minimumParticlesPerSecond: 15
-      maximumParticlesPerSecond: 20
-      minimumParticlesLife: 1
-      maximumParticlesLife: 1.5
+      minimumParticlesPerSecond: 2
+      maximumParticlesPerSecond: 5
+      minimumParticlesLife: 2
+      maximumParticlesLife: 2.5
     settingsCannon:
       Start:
         x: 0
@@ -197,10 +197,10 @@ MonoBehaviour:
       angle: 50
       maximumForce: 0.2
       minimumForce: 0.5
-      minimumParticlesPerSecond: 10
-      maximumParticlesPerSecond: 16
-      minimumParticlesLife: 1.3
-      maximumParticlesLife: 1.8
+      minimumParticlesPerSecond: 2
+      maximumParticlesPerSecond: 5
+      minimumParticlesLife: 3
+      maximumParticlesLife: 3.6
     settingsCollision:
       planes:
       - position:
@@ -253,10 +253,10 @@ MonoBehaviour:
           z: 1
       spheres:
       - position:
-          x: 0.5
-          y: -0.5
+          x: 0
+          y: -0.6
           z: 0
-        radius: 0.5
+        radius: 0.3
       capsules:
       - positionA:
           x: 0
@@ -340,7 +340,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 251018374}
   m_LocalRotation: {x: 0.24604082, y: 0.6284809, z: 0.63071275, w: 0.38298458}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.076, y: 0.1, z: -0.009}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
