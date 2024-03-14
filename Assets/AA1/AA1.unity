@@ -159,7 +159,7 @@ MonoBehaviour:
   cascadeB: {fileID: 2040244667}
   system:
     settings:
-      poolCapacity: 100
+      poolCapacity: 10
       gravity:
         x: 0
         y: -0.980655

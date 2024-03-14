@@ -128,11 +128,8 @@ public class AA1_ParticleSystem
                     int counter = 2;
                     while (passed)
                     {
-                        //particles[i].position -= (particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position)) * 2f;
-                        //particles[i].position = particles[i].lastPosition;
-                        //particles[i].position = particles[i].lastPosition;
-                        //particles[i].position += settings.gravity * (dt/counter);
                         particles[i].position = particles[i].lastPosition;
+                        particles[i].position += particles[i].acceleration * dt/counter;
                         distanceVector = particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position);
                         distance = distanceVector.magnitude;
 
@@ -164,7 +161,7 @@ public class AA1_ParticleSystem
                 float factor = particles[i].size;
                 bool passed = false;
                 Vector3C nearestPoint = settingsCollision.spheres[k].NearestPoint(particles[i].position);
-                Vector3C distanceVector = nearestPoint - particles[i].position;
+                Vector3C distanceVector = particles[i].position - settingsCollision.spheres[k].position;
                 
                 float distance = distanceVector.magnitude;
                 if (distance <= factor * 2)
@@ -176,15 +173,12 @@ public class AA1_ParticleSystem
                     int counter = 2;
                     while (passed)
                     {
-                        //particles[i].position -= (particles[i].position - settingsCollision.planes[j].NearestPoint(particles[i].position)) * 2f;
-                        //particles[i].position = particles[i].lastPosition;
-                        //particles[i].position = particles[i].lastPosition;
-                        //particles[i].position += settings.gravity * (dt/counter);
                         particles[i].position = particles[i].lastPosition;
-                        distanceVector = particles[i].position - settingsCollision.spheres[k].NearestPoint(particles[i].position);
+                        particles[i].position += particles[i].acceleration * dt / counter;
+                        distanceVector = particles[i].position - settingsCollision.spheres[k].position;
                         distance = distanceVector.magnitude;
 
-                        if (distance > 0)
+                        if (distance <= settingsCollision.spheres[k].radius + particles[i].size + factor)
                             passed = false;
                         else
                             counter *= 2;
