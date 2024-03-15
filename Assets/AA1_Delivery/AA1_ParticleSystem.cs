@@ -164,7 +164,7 @@ public class AA1_ParticleSystem
                 Vector3C distanceVector = particles[i].position - settingsCollision.spheres[k].position;
                 
                 float distance = distanceVector.magnitude;
-                if (distance <= factor * 2)
+                if (distance <= settingsCollision.spheres[k].radius + factor)
                     passed = true;
                 if (distance <= settingsCollision.spheres[k].radius + particles[i].size + factor)
                 {
@@ -201,25 +201,7 @@ public class AA1_ParticleSystem
                     particles[i].AddForce(-(particles[i].acceleration));
                     particles[i].AddForce(newVelocity * settings.bounce);
                 }
-                //been Outside eliminado, no hacía nada
-                //if (collision)
-                //{
-
-                    
-
-
-                //    //Vector3C accelNullifier = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.x, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.y, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.z, 2)));
-                //    //Vector3C accelInversor = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.x * 2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.y * 2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.z * 2, 2)));
-                //    //particles[i].acceleration *= accelInversor;
-                //    //particles[i].acceleration *= settings.bounce;
-
-                //    //particles[i].AddForce(settingsCollision.planes[j].normal * - settings.bounce);
-
-                //    //particles[i].acceleration *= accelNullifier;
-                //    //particles[i].AddForce(particleLastAcceleration * -(particleDirection.normalized) * settings.bounce);
-
-                //    collision = false;
-                //}
+         
             }
             //CAPSULES
             //Vector v del punto A a la partícula
@@ -228,37 +210,53 @@ public class AA1_ParticleSystem
             //Crear vector entre el final de la proyección y la partícula
             for (int l = 0; l < settingsCollision.capsules.Length; ++l)
             {
-                bool collision = false;
                 float factor = particles[i].size;
                 Vector3C particulaPuntoA = particles[i].position - settingsCollision.capsules[l].positionA;
                 Vector3C BA = settingsCollision.capsules[l].positionB - settingsCollision.capsules[l].positionA;
                 float proyeccionVenWValue = (Vector3C.Dot(particulaPuntoA, BA));
                 Vector3C proyeccionVenW = BA.normalized * proyeccionVenWValue;
                 Vector3C particleNearestCapsulePoint = particles[i].position - proyeccionVenW;
+                bool passed = false;
 
                 float dist = particleNearestCapsulePoint.magnitude;
 
-                if (dist <= factor)
+                if (dist <= settingsCollision.capsules[l].radius + factor)
                 {
-
+                    passed = true;
                 }
 
-                float distance = (particles[i].position - settingsCollision.spheres[l].position).magnitude;
-                float effectiveParticleRadius = particles[i].size / 2.0f;
-
-                if (distance <= settingsCollision.spheres[l].radius + effectiveParticleRadius + factor
-                    )
+                if (dist <= settingsCollision.spheres[l].radius + particles[i].size + factor)
                 {
                     UnityEngine.Debug.Log("CapsuleCollision");
-                    collision = true;
 
+                    int counter = 2;
+                    while (passed)
+                    {
+                        particles[i].position = particles[i].lastPosition;
+                        particles[i].position += particles[i].acceleration * dt / counter;
+
+                        particulaPuntoA = particles[i].position - settingsCollision.capsules[l].positionA;
+                        BA = settingsCollision.capsules[l].positionB - settingsCollision.capsules[l].positionA;
+                        proyeccionVenWValue = (Vector3C.Dot(particulaPuntoA, BA));
+                        proyeccionVenW = BA.normalized * proyeccionVenWValue;
+                        particleNearestCapsulePoint = particles[i].position - proyeccionVenW;
+                        dist = particleNearestCapsulePoint.magnitude;
+
+                        if (dist <= settingsCollision.capsules[l].radius + particles[i].size + factor)
+                            passed = false;
+                        else
+                            counter *= 2;
+                    }
 
                     //NearestPoint circulo a la partícula
                     //Usando la distancia de este punto al centro hago un vector que me servira como normal
                     //Con un punto y una normal hago un plano
                     //Repito el rebote visto en el plano
 
-                    Vector3C normal = settingsCollision.spheres[l].NearestPoint(particles[i].position) - settingsCollision.spheres[l].position;
+
+                    //No se si esta bien
+
+                    Vector3C normal = proyeccionVenW;
                     //Calcular componente normal
                     float vnMagnitude = Vector3C.Dot(normal, particles[i].acceleration);
                     Vector3C vn = normal * vnMagnitude;
@@ -270,25 +268,6 @@ public class AA1_ParticleSystem
                     particles[i].AddForce(-(particles[i].acceleration));
                     particles[i].AddForce(newVelocity * settings.bounce);
                 }
-                //been Outside eliminado, no hacía nada
-                //if (collision)
-                //{
-
-
-
-
-                //    //Vector3C accelNullifier = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.x, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.y, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[j].normal.z, 2)));
-                //    //Vector3C accelInversor = new Vector3C(1f - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.x * 2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.y * 2, 2)), 1 - (float)Math.Sqrt(Math.Pow(settingsCollision.planes[k].normal.z * 2, 2)));
-                //    //particles[i].acceleration *= accelInversor;
-                //    //particles[i].acceleration *= settings.bounce;
-
-                //    //particles[i].AddForce(settingsCollision.planes[j].normal * - settings.bounce);
-
-                //    //particles[i].acceleration *= accelNullifier;
-                //    //particles[i].AddForce(particleLastAcceleration * -(particleDirection.normalized) * settings.bounce);
-
-                //    collision = false;
-                //}
             }
         }
             time += dt;
