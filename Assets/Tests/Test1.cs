@@ -12,11 +12,7 @@ public class Test1 : MonoBehaviour
     
     Vector3C colorRed = new Vector3C(255f, 0f, 0f);
     [SerializeField]
-    LineC lineC;
-    [SerializeField]
-    Vector3C point;
-    [SerializeField]
-    PlaneC planeC;
+    private SphereC sphereC;
     private Vector3C nearestPoint;
     private Vector3C intersectionWithLine;
 
@@ -24,20 +20,20 @@ public class Test1 : MonoBehaviour
     void Update()
     {
         //nearestPoint = lineC.NearestPointToPoint(point);
-        CustomDebug.Print(point, 5);
-        nearestPoint = planeC.NearestPoint(point);
-        CustomDebug.Print(lineC, colorRed, false);
-        intersectionWithLine = planeC.IntersectionWithLine(lineC);
-        CustomDebug.Print(nearestPoint, 5);
-        CustomDebug.Print(intersectionWithLine, 5);
-        Debug.DrawLine(point.ToUnity(),nearestPoint.ToUnity(), Color.magenta, 5f);
-        Debug.Log(nearestPoint.x);
-        Debug.Log(nearestPoint.y);
-        Debug.Log(nearestPoint.z);
+        //CustomDebug.Print(point, 5);
+        //nearestPoint = planeC.NearestPoint(point);
+        //CustomDebug.Print(lineC, colorRed, false);
+        //intersectionWithLine = planeC.IntersectionWithLine(lineC);
+        //CustomDebug.Print(nearestPoint, 5);
+        //CustomDebug.Print(intersectionWithLine, 5);
+        //Debug.DrawLine(point.ToUnity(),nearestPoint.ToUnity(), Color.magenta, 5f);
+        //Debug.Log(nearestPoint.x);
+        //Debug.Log(nearestPoint.y);
+        //Debug.Log(nearestPoint.z);
 
     }
     private void OnDrawGizmos()
     {
-        CustomDebug.Print(planeC, colorRed, 10);
+        CustomDebug.Print(sphereC, colorRed);
     }
 }
